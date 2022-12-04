@@ -22,15 +22,10 @@ def get_url_films() :
     return set(url_enfants) 
 
 
-# recuprere les données sur chaque films 
+# recuperer les données sur chaque films 
+def get_donnees_film(func) : 
 
-
-
-
-
-def get_donnees_film() : 
-
-    url_films = get_url_films()
+    url_films = func()
     donnees_film = {} 
 
     for film in url_films : 
@@ -58,8 +53,6 @@ def get_donnees_film() :
 
 
 
-    
-
-pprint.pprint((donnees_film))
+pprint.pprint((get_donnees_film(get_url_films)))
 
 
