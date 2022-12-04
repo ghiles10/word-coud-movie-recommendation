@@ -38,7 +38,23 @@ def get_note_et_nb_avis(lien_avis) :
             return regex_note, regex_nb_avis
 
 
-def get_url_avis(soup_film_base ) : 
+def get_info_de_base(soup_film_base) : 
+    
+    for info_film in soup_film_base.find_all(class_ = 'meta-body-item meta-body-info') :
+
+        # recupération des dates 
+        regex_date =  re.findall(r"[0-9]+ [a-zA-Z]+ [0-9]+", str(info_film))[0]
+
+        # récupération de la durée 
+        regex_duree = re.findall(r"[0-9]{1,3}h [0-9]+min", str(info_film))[0]
+
+        # récupération dy type de films 
+        regex_type =  re.findall(r">([a-zA-Z éè]+)<", str(info_film))
+    
+    return regex_date, regex_duree, regex_type
+
+
+def ajout_nombre_avis_et_note(soup_film_base ) : 
     """ retourne le lien de page de chaque films ou se trouve les avis et appel chaque lien sur la fonction get_note_et_nb_avis"""
 
     # récupération des liens des avis dans la liste liens_avis
@@ -68,28 +84,15 @@ def get_donnees_film() :
             donnees_film[titre_html.text] = []
 
         # recupération des info
-        for info_film in soup_film.find_all(class_ = 'meta-body-item meta-body-info') :
-
-            # recupération des dates 
-            regex_date =  re.findall(r"[0-9]+ [a-zA-Z]+ [0-9]+", str(info_film))[0]
-            donnees_film[titre_html.text].append(regex_date)
-
-            # récupération de la durée 
-            regex_duree = re.findall(r"[0-9]{1,3}h [0-9]+min", str(info_film))[0]
-            donnees_film[titre_html.text].append(regex_duree)
-
-            # récupération dy type de films 
-            regex_type =  re.findall(r">([a-zA-Z éè]+)<", str(info_film))
-            donnees_film[titre_html.text].append(regex_type)
+        donnees_film[titre_html.text].append(get_info_de_base(soup_film))
             
-            #récupération du nb_avis et note 
-            donnees_film[titre_html.text].append( get_url_avis(soup_film ) ) 
+        #récupération du nb_avis et note 
+        donnees_film[titre_html.text].append( ajout_nombre_avis_et_note(soup_film ) ) 
         
-
     return donnees_film 
 
 
-print(get_donnees_film())
+pprint.pprint(get_donnees_film())
 
 
 
