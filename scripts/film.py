@@ -3,7 +3,7 @@ import requests
 import re
 import pprint
 
-# récuperer les liens des pages des films 
+
 def get_url_films() : 
     """permet de récupérer les liens de chaque film de la page du site web inital"""
 
@@ -38,6 +38,18 @@ def get_note_et_nb_avis(lien_avis) :
             return regex_note, regex_nb_avis
 
 
+def get_commentaire(lien_avis) : 
+
+    commentaire =[] # afin de stocker tous les commentaire 
+
+    soup_commentaire = BeautifulSoup(requests.get(str(lien_avis)).content, 'html.parser')   
+    
+    for com in soup_commentaire.find_all(class_ = "content-txt review-card-content") : 
+        commentaire.append( str(com.text) )
+    
+    return commentaire
+
+
 def get_info_de_base(soup_film_base) : 
     
     for info_film in soup_film_base.find_all(class_ = 'meta-body-item meta-body-info') :
@@ -65,7 +77,7 @@ def ajout_nombre_avis_et_note(soup_film_base ) :
         if len(regex_lien_avis) > 0 :    
             lien_avis = "http://allocine.fr" + regex_lien_avis[0]  
 
-            return get_note_et_nb_avis(lien_avis) 
+            return get_note_et_nb_avis(lien_avis), get_commentaire(lien_avis) 
             
 
 def get_donnees_film() : 
@@ -73,7 +85,7 @@ def get_donnees_film() :
     """retourne un dictionnaire qui permet d'avoir toutes les info sur les films"""
 
     url_films = get_url_films()
-    donnees_film = {} 
+    donnees_film = {} # stocker les données
 
     # recup html de chaque page film 
     for film in url_films : 
@@ -87,9 +99,18 @@ def get_donnees_film() :
         donnees_film[titre_html.text].append(get_info_de_base(soup_film))
             
         #récupération du nb_avis et note 
-        donnees_film[titre_html.text].append( ajout_nombre_avis_et_note(soup_film ) ) 
+        donnees_film[titre_html.text].append( ajout_nombre_avis_et_note(soup_film )[0] ) 
+
+        # récupération commentaire 
+        donnees_film[titre_html.text].append(ajout_nombre_avis_et_note(soup_film )[1])
         
     return donnees_film 
+
+
+
+
+
+
 
 
 pprint.pprint(get_donnees_film())
