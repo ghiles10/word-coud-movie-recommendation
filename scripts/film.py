@@ -26,7 +26,6 @@ def get_note_et_nb_avis(lien_avis) :
 
     """ prends un lien et retourne un tuple stockant le nb d'avis et de la note moyenne pour chaque film"""
 
-    avis = []
     soup_avis = BeautifulSoup(requests.get(str(lien_avis)).content, 'html.parser')   
 
     # avoir la note et nb_avis 
@@ -35,10 +34,8 @@ def get_note_et_nb_avis(lien_avis) :
         regex_note = re.findall(r'"note">([0-9,]+)<', str(note_nombre))[0].replace(',', '.')
         regex_nb_avis = re.findall(r'([0-9]+) critiques spectateurs', str(note_nombre))[0]
 
-        if isinstance(float(regex_note), float) and isinstance(float(regex_nb_avis), float) :
-            avis.append((regex_note, regex_nb_avis)  )
-        
-    return avis     
+        if isinstance(float(regex_note), float) and isinstance(float(regex_nb_avis), float) :      
+            return regex_note, regex_nb_avis
 
 
 def get_url_avis(soup_film_base ) : 
@@ -82,7 +79,7 @@ def get_donnees_film() :
             donnees_film[titre_html.text].append(regex_duree)
 
             # récupération dy type de films 
-            regex_type =  re.findall(r">([a-zA-Z éè]+)<", str(info_film)) 
+            regex_type =  re.findall(r">([a-zA-Z éè]+)<", str(info_film))
             donnees_film[titre_html.text].append(regex_type)
             
             #récupération du nb_avis et note 
