@@ -10,7 +10,6 @@ def get_url_films() :
     url_enfants = []
 
     for page in range(1,2): 
-
         url_page = f"https://www.allocine.fr/films/?page={page}"
         soup = BeautifulSoup(requests.get(url_page).text, 'html.parser')
 
@@ -20,7 +19,6 @@ def get_url_films() :
                 url_enfants.append('http://allocine.fr'+regex_url)
 
     return set(url_enfants) 
-
 
 # recuperer les données sur chaque films 
 def get_donnees_film(func) : 
@@ -56,10 +54,9 @@ def get_donnees_film(func) :
     
 ####récupérer les avis et la note                               
 
-def get_avis(func) : 
+def get_avis(func, ) : 
 
     url_films = func()     
-    avis = []     # stocker la note moyenne et le nb d'avis                
 
     liens_avis = []  # afin de stocker les liens des films contenant les avis 
     for film in url_films :     
@@ -67,28 +64,30 @@ def get_avis(func) :
 
         # récupération des liens des avis dans la liste liens_avis
         for page_avis in soup_film.find_all(class_="end-section-link") : 
-        
-            # récupération du lien avis         
-            regex_avis =  re.findall(r'href="(/.*/critiques/spectateurs/)', str(page_avis))  
 
-            if len(regex_avis) > 0 :    
-                lien_avis = "http://allocine.fr" + regex_avis[0]     
+            # récupération du lien avis         
+            regex_lien_avis =  re.findall(r'href="(/.*/critiques/spectateurs/)', str(page_avis)) 
+            if len(regex_lien_avis) > 0 :    
+                lien_avis = "http://allocine.fr" + regex_lien_avis[0]     
                 liens_avis.append(lien_avis)  
 
-    # entrer dans les liens des avis                    
+    # entrer dans les liens des avis        
+    avis = [] # stocker la note moyenne et le nb d'avis                
+
     for url_avis in liens_avis : 
         soup_avis = BeautifulSoup(requests.get(str(url_avis)).content, 'html.parser')   
 
         # avoir la note
-        for note in soup_avis.find_all(class_  = 'note' ) : 
-            avis.append((note.text ,)) 
+        for note_nombre in soup_avis.find_all(class_  = "gd gd-gap-15 gd-xs-1 reviews-note-holder") : 
+
+            regex_note = re.findall(r'"note">([0-9,]+)<', str(note_nombre))[0].replace(',', '.')
+            regex_nb_avis = re.findall(r'([0-9]+) critiques spectateurs', str(note_nombre))[0]
+
+            if isinstance(float(regex_note), float) and isinstance(float(regex_nb_avis), float):
+                avis.append((regex_note, regex_nb_avis)  )
         
-        # nb d'avis
-        for nb_avis in soup_avis.find_all(class_ ="titlebar-title titlebar-title-md") :
-            regex_nb_avis =  re.findall(r'([0-9]+) critiques spectateurs', str(nb_avis))
-            if len(regex_nb_avis) > 0 :
-                avis.append(regex_nb_avis)
     return avis 
+
     
 print(get_avis(get_url_films))
 
