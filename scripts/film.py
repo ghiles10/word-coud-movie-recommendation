@@ -1,10 +1,10 @@
 from bs4 import BeautifulSoup
 import requests 
 import re
-import pprint
+# import pprint
 
 
-def get_url_films(nb_page = 25) : 
+def get_url_films(nb_page = 10) : 
     """permet de récupérer les liens de chaque film de la page du site web inital"""
 
     # pour stocker les url des pages web des films 
@@ -115,7 +115,7 @@ def get_donnees_film() :
         try : 
             donnees_film[titre_html.text].append( ajout_nombre_avis_et_note(soup_film )[0] ) 
         except TypeError:
-             donnees_film[titre_html.text].append(('vide','vide'))
+            donnees_film[titre_html.text].append(('vide','vide'))
 
         # récupération commentaire 
         try :
@@ -126,8 +126,6 @@ def get_donnees_film() :
     return donnees_film 
 
 
-pprint.pprint( len(get_donnees_film()) ) 
- 
-
-
-
+if __name__ == "__main__" : 
+    get_donnees_film()
+    
