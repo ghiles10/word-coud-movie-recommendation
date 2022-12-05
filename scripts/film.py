@@ -4,13 +4,13 @@ import re
 import pprint
 
 
-def get_url_films() : 
+def get_url_films(nb_page = 25) : 
     """permet de récupérer les liens de chaque film de la page du site web inital"""
 
     # pour stocker les url des pages web des films 
     url_enfants = []
 
-    for page in range(1,25):  # nombre de page 
+    for page in range(1,nb_page ):  # nombre de page 
         url_page = f"https://www.allocine.fr/films/?page={page}"
         soup = BeautifulSoup(requests.get(url_page).text, 'html.parser')
 
