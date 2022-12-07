@@ -1,16 +1,16 @@
 from bs4 import BeautifulSoup
 import requests 
 import re
-import pprint
+# import pprint
 
 
-def get_url_films() : 
+def get_url_films(nb_page = 10) : 
     """permet de récupérer les liens de chaque film de la page du site web inital"""
 
     # pour stocker les url des pages web des films 
     url_enfants = []
 
-    for page in range(1,2): 
+    for page in range(1,nb_page ):  # nombre de page 
         url_page = f"https://www.allocine.fr/films/?page={page}"
         soup = BeautifulSoup(requests.get(url_page).text, 'html.parser')
 
@@ -30,45 +30,58 @@ def get_note_et_nb_avis(lien_avis) :
 
     # avoir la note et nb_avis 
     for note_nombre in soup_avis.find_all(class_  = "gd gd-gap-15 gd-xs-1 reviews-note-holder") : 
+        try : 
+            regex_note = re.findall(r'"note">([0-9,]+)<', str(note_nombre))[0].replace(',', '.')
+            regex_nb_avis = re.findall(r'([0-9]+) critiques spectateurs', str(note_nombre))[0]
 
-        regex_note = re.findall(r'"note">([0-9,]+)<', str(note_nombre))[0].replace(',', '.')
-        regex_nb_avis = re.findall(r'([0-9]+) critiques spectateurs', str(note_nombre))[0]
+            if isinstance(float(regex_note), float) and isinstance(float(regex_nb_avis), float) :      
+                return regex_note, regex_nb_avis
 
-        if isinstance(float(regex_note), float) and isinstance(float(regex_nb_avis), float) :      
-            return regex_note, regex_nb_avis
+        except IndexError: 
+            return 'vide' , 'vide'
 
 
 def get_commentaire(lien_avis) : 
 
-    commentaire =[] # afin de stocker tous les commentaire 
+    
+    try :
+        commentaire =[] # afin de stocker tous les commentaire  
+        soup_commentaire = BeautifulSoup(requests.get(str(lien_avis)).content, 'html.parser')   
+        
+        for com in soup_commentaire.find_all(class_ = "content-txt review-card-content") : 
+            commentaire.append( str(com.text) )
+        
+        return commentaire
 
-    soup_commentaire = BeautifulSoup(requests.get(str(lien_avis)).content, 'html.parser')   
-    
-    for com in soup_commentaire.find_all(class_ = "content-txt review-card-content") : 
-        commentaire.append( str(com.text) )
-    
-    return commentaire
+    except TypeError: 
+        return "vide"
 
 
 def get_info_de_base(soup_film_base) : 
     
-    for info_film in soup_film_base.find_all(class_ = 'meta-body-item meta-body-info') :
+    try : 
+        for info_film in soup_film_base.find_all(class_ = 'meta-body-item meta-body-info') :
 
-        # recupération des dates 
-        regex_date =  re.findall(r"[0-9]+ [a-zA-Z]+ [0-9]+", str(info_film))[0]
+            # recupération des dates 
+            regex_date =  re.findall(r"[0-9]+ [a-zA-Z]+ [0-9]+", str(info_film))[0]
 
-        # récupération de la durée 
-        regex_duree = re.findall(r"[0-9]{1,3}h [0-9]+min", str(info_film))[0]
+            # récupération de la durée 
+            regex_duree = re.findall(r"[0-9]{1,3}h [0-9]+min", str(info_film))[0]
 
-        # récupération dy type de films 
-        regex_type =  re.findall(r">([a-zA-Z éè]+)<", str(info_film))
+            # récupération dy type de films 
+            regex_type =  re.findall(r">([a-zA-Z éè]+)<", str(info_film))
+
+    except IndexError:  # eviter erreur  manque de data sur le site web
+        regex_date = 'vide'
+        regex_duree = 'vide'
+        regex_type = 'vide'
     
     return regex_date, regex_duree, regex_type
 
 
 def ajout_nombre_avis_et_note(soup_film_base ) : 
     """ retourne le lien de page de chaque films ou se trouve les avis et appel chaque lien sur la fonction get_note_et_nb_avis"""
-
+    
     # récupération des liens des avis dans la liste liens_avis
     for page_avis in soup_film_base.find_all(class_="end-section-link") : 
 
@@ -99,22 +112,20 @@ def get_donnees_film() :
         donnees_film[titre_html.text].append(get_info_de_base(soup_film))
             
         #récupération du nb_avis et note 
-        donnees_film[titre_html.text].append( ajout_nombre_avis_et_note(soup_film )[0] ) 
+        try : 
+            donnees_film[titre_html.text].append( ajout_nombre_avis_et_note(soup_film )[0] ) 
+        except TypeError:
+            donnees_film[titre_html.text].append(('vide','vide'))
 
         # récupération commentaire 
-        donnees_film[titre_html.text].append(ajout_nombre_avis_et_note(soup_film )[1])
-        
+        try :
+            donnees_film[titre_html.text].append(ajout_nombre_avis_et_note(soup_film )[1])
+        except TypeError: 
+            donnees_film[titre_html.text].append('vide')
+
     return donnees_film 
 
 
-
-
-
-
-
-
-pprint.pprint(get_donnees_film())
-
-
-
-
+if __name__ == "__main__" : 
+    get_donnees_film()
+    
