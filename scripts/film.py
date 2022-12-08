@@ -63,7 +63,7 @@ def get_info_de_base(soup_film_base) :
         for info_film in soup_film_base.find_all(class_ = 'meta-body-item meta-body-info') :
 
             # recupération des dates 
-            regex_date =  re.findall(r"[0-9]+ [a-zA-Zéè]+ [0-9]+", str(info_film))[0]
+            regex_date =  re.findall(r"[0-9]+ [a-zA-Zéèû]+ [0-9]+", str(info_film))[0]
 
             # récupération de la durée 
             regex_duree = re.findall(r"[0-9]{1,3}h [0-9]+min", str(info_film))[0]

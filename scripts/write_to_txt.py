@@ -11,8 +11,7 @@ def extract_data() :
 
             f.write( str(titre)+ '\t' + str(info[0][0])+ '\t' + str(info[0][1]) + '\t' + str(info[0][2])\
              +'\t' + str(info[1][0]) + '\t' + str(info[1][1]) + '\t' +str(info[2])+ '\n' )
-            
-
+        
     f.close()
     print('ok')
 
