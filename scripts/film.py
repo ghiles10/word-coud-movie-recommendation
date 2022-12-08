@@ -49,7 +49,7 @@ def get_commentaire(lien_avis) :
         soup_commentaire = BeautifulSoup(requests.get(str(lien_avis)).content, 'html.parser')   
         
         for com in soup_commentaire.find_all(class_ = "content-txt review-card-content") : 
-            commentaire.append( str(com.text) )
+            commentaire.append( com.text) 
         
         return commentaire
 
