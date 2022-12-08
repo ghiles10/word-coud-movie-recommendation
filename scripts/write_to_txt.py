@@ -1,14 +1,18 @@
-from scripts import film
+import film
 
 # écrire vers un fichier txt
 raw_data = film.get_donnees_film()
 
+# écrire les donnes vers le fichier texte 
+def extract_data() : 
+    
+    for titre, info in raw_data.items() : 
+        with open('data_test.txt', 'a') as f :
+            f.write( str(titre)+ ',' + str(info[0])+',' +str(info[1])+ ',' +str(info[2])+ '\n' )
+            
 
-print(raw_data)
-# écrire les donnes vers le fichier en format csv (sep = ;)
-# with open('data_film.txt', 'w') as f : 
+    f.close()
+    print('ok')
 
-#     f.write('titre,date,duree,note moyenne,nombre avis')
-#     f.close()
-
+extract_data()
 

@@ -1,1 +1,0 @@
-titre,date,duree,note moyenne,nombre avis
