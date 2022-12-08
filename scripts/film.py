@@ -49,7 +49,7 @@ def get_commentaire(lien_avis) :
         soup_commentaire = BeautifulSoup(requests.get(str(lien_avis)).content, 'html.parser')   
         
         for com in soup_commentaire.find_all(class_ = "content-txt review-card-content") : 
-            commentaire.append( str(com.text) )
+            commentaire.append( com.text) 
         
         return commentaire
 
@@ -63,7 +63,7 @@ def get_info_de_base(soup_film_base) :
         for info_film in soup_film_base.find_all(class_ = 'meta-body-item meta-body-info') :
 
             # recupération des dates 
-            regex_date =  re.findall(r"[0-9]+ [a-zA-Z]+ [0-9]+", str(info_film))[0]
+            regex_date =  re.findall(r"[0-9]+ [a-zA-Zéèû]+ [0-9]+", str(info_film))[0]
 
             # récupération de la durée 
             regex_duree = re.findall(r"[0-9]{1,3}h [0-9]+min", str(info_film))[0]
