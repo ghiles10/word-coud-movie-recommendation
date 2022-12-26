@@ -41,6 +41,10 @@ def preproces_for_machine_learning(data, spark_session) :
     spark_session.conf.set("spark.sql.legacy.timeParserPolicy", "LEGACY") # car ne veut pas reconnaitre le format de base 
     data = data.withColumn("date", F.to_date("date", "dd MM yyyy"))
 
+    #caster string to int 
+    data = data.withColumn("duree", F.cast(F.col("duree"), "int"))
+    data = data.withColumn("note", F.cast(F.col("note"), "int"))
+ 
     return data 
   
 
