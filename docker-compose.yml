@@ -3,24 +3,39 @@ version: '3'
 services:
 
   db:
-    image: mysql:latest
+    image: postgres
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydatabase
-  pma:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: root
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: mydatabase
     ports:
-      - "8080:80"
+      - 5432:5432
+    networks:
+      - monreseau
+    restart: always
+
+  admine:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    networks:
+      - monreseau      
     links:
       - db
+
   python:
     build: .
-    command: python write_to_sql.py
+    networks:
+      - monreseau     
+    depends_on:
+      - db    
     links:
       - db
+
+networks:
+  monreseau:
+     name: monreseau
 

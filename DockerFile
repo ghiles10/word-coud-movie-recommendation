@@ -1,8 +1,8 @@
-FROM python:latest 
+FROM python:3
 ADD . /app
 WORKDIR /app 
 
 RUN pip install -r requirements.txt
  
 
-CMD ["python", "scripts/write_to_sql.py"]
+CMD ["python3", "./scripts/write_to_sql.py"]

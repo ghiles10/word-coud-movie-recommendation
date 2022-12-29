@@ -1,6 +1,6 @@
-import mysql.connector
 import pandas as pd
 import film 
+from sqlalchemy import create_engine
 
 def extract_data() : 
     
@@ -21,24 +21,20 @@ def extract_data() :
 
 extract_data()
 
-######################
 
-# Read the CSV file into a DataFrame
-df = pd.read_csv(r'../data/data_film.txt', sep = '\t')
+# Créez un DataFrame Pandas à partir du fichier CSV
+df = pd.read_csv(r'./data/data_film.txt', sep='\t', header = None,names= ['titre', 'date' , 'duree' , 'type' , 'note' , 'nb_avis' , 'avis'])
 
-# Connect to the database
-cnx = mysql.connector.connect(user='root',
-                              password='root',
-                              host='mysql',
-                              database='mydatabase')
+# Créez un objet engine
+user = 'docker'
+password = 'docker'
+host = 'db'
+database_name = 'mydatabase'
 
-# Write the DataFrame to a table in the database
-df.to_sql(name='table_name', con=cnx, if_exists='replace', index=False)
+# Créez l'objet engine
+engine = create_engine(f'postgresql://{user}:{password}@{host}/{database_name}')
 
-# Close the connection
-cnx.close()
+# Écrivez le DataFrame dans la table
+df.to_sql('film', engine, if_exists='replace')
 
-
-
-
-
+print('Vous pouvez ouvrir')
