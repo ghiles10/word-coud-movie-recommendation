@@ -1,40 +1,30 @@
 import pandas as pd
-import film 
+import write_to_txt 
+import preprocess_for_ML_pyspark
 from sqlalchemy import create_engine
 
-def extract_data() : 
-    
-    """permet de scrapper les données et écrire dans un fichier txt"""
-    print('debut scrapping')
-    raw_data = film.get_donnees_film()
+def main() : 
 
-    with open(r'data/data_film.txt', 'w') as f :
-        
-        for titre, info in raw_data.items() : 
+    write_to_txt.extract_data()
 
-            f.write( str(titre)+ '\t' + str(info[0][0])+ '\t' + str(info[0][1]) + '\t' + str(info[0][2])\
-            +'\t' + str(info[1][0]) + '\t' + str(info[1][1]) + '\t' +str(info[2])+ '\n' )
-    
-        f.close()
+    # création d'une base de données avec pyspark/ nettoyage de la base 
+    data_spark = preprocess_for_ML_pyspark.preproces_for_machine_learning()
 
-    print('extracting data done')
+    # Conversion du DataFrame PySpark en DataFrame pandas
+    df = data_spark.toPandas()
 
-extract_data()
+    # Créer un objet engine
+    USER = 'docker'
+    PASSWORD = 'docker'
+    HOST = 'db'
+    DATABASE_NAME = 'mydatabase'
 
+    engine = create_engine(f'postgresql://{USER}:{PASSWORD}@{HOST}/{DATABASE_NAME}')
 
-# Créez un DataFrame Pandas à partir du fichier CSV
-df = pd.read_csv(r'./data/data_film.txt', sep='\t', header = None,names= ['titre', 'date' , 'duree' , 'type' , 'note' , 'nb_avis' , 'avis'])
+    # Écriture du DataFrame dans la table
+    df.to_sql('film', engine, if_exists='replace')
 
-# Créez un objet engine
-user = 'docker'
-password = 'docker'
-host = 'db'
-database_name = 'mydatabase'
+    print('Vous pouvez ouvrir')
 
-# Créez l'objet engine
-engine = create_engine(f'postgresql://{user}:{password}@{host}/{database_name}')
-
-# Écrivez le DataFrame dans la table
-df.to_sql('film', engine, if_exists='replace')
-
-print('Vous pouvez ouvrir')
+if __name__ =='__main__':
+    main()
