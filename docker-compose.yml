@@ -18,22 +18,39 @@ services:
     image: adminer
     restart: always
     depends_on:
-      - db
+      - python
     ports:
       - 8080:8080
     networks:
-      - monreseau      
+      - monreseau    
     links:
       - db
 
   python:
-    build: .
+    build:
+      context: ./scripts
+      dockerfile: Dockerfile
     networks:
       - monreseau     
     depends_on:
       - db    
     links:
       - db
+
+    
+  dash:
+    build:
+      context: ./dash
+      dockerfile: Dockerfile
+    depends_on:
+      - python
+    networks:
+      - monreseau
+    ports:
+      - "8001:8050"
+    links:
+      - db
+
 
 networks:
   monreseau:

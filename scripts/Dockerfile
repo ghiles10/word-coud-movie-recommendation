@@ -18,4 +18,4 @@ RUN apt-get -y install python3-pip
 
 RUN pip install -r requirements.txt
 
-CMD ["python3", "./scripts/write_to_sql.py"]
+CMD ["python3", "./write_to_sql.py"]
