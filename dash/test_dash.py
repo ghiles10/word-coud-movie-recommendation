@@ -5,15 +5,13 @@ import plotly.express as px
 import pandas as pd
 import recuperation_sql_to_pandas
 
-
 # read data
-# df = pd.read_csv(r"data\data_film.txt", sep = "\t", header = None, names = ['titre', 'date', 'duree', 'type', 'note', 'nombre avis', 'avis'] )
 df = recuperation_sql_to_pandas.sql_to_pandas()
 
 # Import the data for the first graph
+colors = ['rgba(255, 0, 0, {})'.format(i/len(df)) for i in range(len(df))]
+fig = px.histogram(df, x="duree", title="duree", color=colors, histfunc="percent")
 
-x1 = df['duree'].value_counts()[0]
-y1 = df['duree']
 
 # Import the data for the second graph
 x2 = df['duree'].value_counts()[0]
@@ -32,14 +30,9 @@ app.layout = html.Div([
     html.H1('My Web App'),
     # Add a div to hold the graphs
     html.Div([
+        
         # Add the first graph (countplot)
-        dcc.Graph(
-            id='graph-1',
-            figure={
-                'data': [{'x': x1, 'y': y1, 'type': 'bar'}],
-                'layout': {'title': 'First Graph (Countplot)'}
-            }
-        ),
+        dcc.Graph(figure=fig),
         # Add the second graph (pie chart)
         dcc.Graph(
             id='graph-2',
