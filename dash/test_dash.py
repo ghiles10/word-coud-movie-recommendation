@@ -3,15 +3,20 @@ from dash import dcc
 from dash import html
 import plotly.express as px
 import pandas as pd
+import plotly.io as pio
+import matplotlib.pyplot as plt
 import recuperation_sql_to_pandas
-import random 
+import word_cloud 
 
 # read data
 df = recuperation_sql_to_pandas.sql_to_pandas()
 
-# Import the data for the first graph
-fig1 = px.histogram(df, x="duree", title="Durée film")
 
+# fig1 
+fig = px.histogram(df, x="duree", title="duree")
+
+# Convertir le graphique en code HTML png
+word_cloud.word_cloud()
 
 # Import the data for the second graph
 df['date'] = pd.to_datetime(df['date'])
@@ -40,6 +45,8 @@ app.layout = html.Div([
     # Add a div to hold the graphs
     html.Div([
         
+        #wordcloud
+          html.Img(src='word_cloud.png'),
         # Add the first graph (countplot)
         dcc.Graph(figure=fig1),
         # Add the second graph (pie chart)
@@ -49,20 +56,22 @@ app.layout = html.Div([
         dcc.Graph(figure=fig3),
 
     ]),
+])
+
     # Add some style to make the app look nice
 
 
-    html.Div(
-    children=[
-        # Your elements go here
-    ],
-    style={
-        'backgroundColor': 'blue',
-        'color': 'blue'
-    }
-)
+#     html.Div(
+#     children=[
+#         # Your elements go here
+#     ],
+#     style={
+#         'backgroundColor': 'blue',
+#         'color': 'blue'
+#     }
+# )
 
-])
+
 
 # Run the app
 if __name__ == '__main__':

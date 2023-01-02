@@ -23,8 +23,9 @@ def main() :
 
     # Écriture du DataFrame dans la table
     df.to_sql('film', engine, if_exists='replace')
-
-    print('Vous pouvez ouvrir')
+    
+    print('#############################################################')
+    print('Vous pouvez ouvrir postgres')
 
 if __name__ =='__main__':
     main()

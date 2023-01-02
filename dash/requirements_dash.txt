@@ -3,3 +3,7 @@ sqlalchemy
 psycopg2
 dash
 plotly
+nltk 
+wordcloud
+matplotlib
+pillow
