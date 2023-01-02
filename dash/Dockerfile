@@ -9,4 +9,6 @@ RUN apt-get -y install python3-pip
 
 RUN pip install -r requirements_dash.txt
 
+EXPOSE 8235
+
 CMD ["python3", "./test_dash.py"]
