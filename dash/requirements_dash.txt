@@ -3,3 +3,5 @@ sqlalchemy
 psycopg2
 dash
 plotly
+wordcloud
+nltk
