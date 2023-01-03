@@ -14,14 +14,13 @@ def word_cloud() :
     import plotly.tools as tls
     from PIL import Image
 
-
     # read data
     df = recuperation_sql_to_pandas.sql_to_pandas()
 
     # stop word 
     stop_words = set(stopwords.words('french'))
     # ajout des mots vides
-    mots_vides = ["film", "\n","plus","a","sans","dans","sans","cette",'cet', "jour","encore","fait","comme","un","très"]
+    mots_vides = ["film", "\n","plus","a","sans","dans","sans","cette",'cet', "jour","encore","fait","comme","un","très"] 
     stop_words.update(mots_vides) 
 
     # Définir le calque du nuage des mots
@@ -30,6 +29,7 @@ def word_cloud() :
     # Obtenir un objet Image à partir de wc
     image = wc.to_image()
     # Enregistrer l'image en utilisant la méthode save de l'objet Image
+    
     image.save(r'./data/word_cloud.png')
     print('########################################################### image enregisterer')
 

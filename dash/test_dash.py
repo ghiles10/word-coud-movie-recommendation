@@ -3,21 +3,15 @@ from dash import dcc, html, Input, Output
 from dash import html
 import plotly.express as px
 import pandas as pd
-import plotly.io as pio
-import matplotlib.pyplot as plt
 import recuperation_sql_to_pandas
 import word_cloud 
 import base64
+
 # read data
 df = recuperation_sql_to_pandas.sql_to_pandas()
 
-
-# fig1 
-fig = px.histogram(df, x="duree", title="duree")
-
-# Convertir le graphique en code HTML png
-word_cloud.word_cloud()
-
+# Import the data for the first graph
+fig1 = px.histogram(df, x="duree", title="Durée film")
 import os
 # Vérifiez si le fichier "monfichier.txt" existe dans le répertoire courant
 if os.path.exists(r"./data/word_cloud.png"):
@@ -29,6 +23,8 @@ else:
 image_filename = r"./data/word_cloud.png" # replace with your own image
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
+# Convertir le graphique en code HTML png
+word_cloud.word_cloud()
 
 # Import the data for the second graph
 df['date'] = pd.to_datetime(df['date'])
@@ -74,7 +70,6 @@ app.layout = html.Div([
 
     ]),
 ])
-
 
 
 # Run the app
