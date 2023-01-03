@@ -1,5 +1,5 @@
 import dash
-from dash import dcc
+from dash import dcc, html, Input, Output 
 from dash import html
 import plotly.express as px
 import pandas as pd
@@ -23,10 +23,9 @@ word_cloud.word_cloud()
 import os
 # Vérifiez si le fichier "monfichier.txt" existe dans le répertoire courant
 if os.path.exists(r"./data/word_cloud.png"):
-    print("----------------------------------------------------------------------------------->")
-    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    print("-----------------------------------------------------------------------------------")
 else:
-    print("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 
 image_filename = r"./data/word_cloud.png" # replace with your own image
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
@@ -51,16 +50,19 @@ fig3 = px.histogram(df, x="type", title="Type de film")
 # Initialize the app
 app = dash.Dash()
 
+
+
 # Define the layout of the app
 app.layout = html.Div([
+
+    dcc.Dropdown(id = "select_titre", options = [{'label': title, 'value': title} for title in df['titre'].unique()], value='M3GAN'),
 
     # Add a title
     html.H1('My Web App'),
     # Add a div to hold the graphs
     html.Div([
-        
-        #wordcloud
-         html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode())),
+
+        dcc.Graph(id='my_bee_map', figure={}), 
         # Add the first graph (countplot)
         dcc.Graph(figure=fig1),
         # Add the second graph (pie chart)
@@ -72,20 +74,16 @@ app.layout = html.Div([
     ]),
 ])
 
-    # Add some style to make the app look nice
+# Connect the Plotly graphs with Dash Components
+@app.callback(
+    [Output(component_id='my_bee_map', component_property='figure')],
+    [Input(component_id='select_titre', component_property='value')]
+)
 
-
-#     html.Div(
-#     children=[
-#         # Your elements go here
-#     ],
-#     style={
-#         'backgroundColor': 'blue',
-#         'color': 'blue'
-#     }
-# )
-
-
+def update_graph(option_slctd):
+    # Générez le nuage de mots en utilisant les données filtrées
+    fig = word_cloud.word_cloud(option_slctd)
+    return fig
 
 # Run the app
 if __name__ == '__main__':

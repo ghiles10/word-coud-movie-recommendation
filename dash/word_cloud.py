@@ -1,5 +1,5 @@
 
-def word_cloud() : 
+def word_cloud(titre) : 
 
     import pandas as pd
     import recuperation_sql_to_pandas
@@ -22,8 +22,9 @@ def word_cloud() :
     # stop word 
     stop_words = set(stopwords.words('french'))
     # ajout des mots vides
-    mots_vides = ["film", "\n"]
+    mots_vides = ["film", "\n","plus","a","sans","dans","sans","cette",'cet', "jour","encore","fait","comme","un","très"]
     stop_words.update(mots_vides) 
+
     print('##############################################################################################')
     print(stop_words) 
     print()
@@ -33,13 +34,17 @@ def word_cloud() :
 
     # Définir le calque du nuage des mots
     wc = WordCloud(background_color="black", max_words=50, stopwords=stop_words, max_font_size=50, random_state=42)
-    wc.generate(str(df['avis'][0]))  # "Calcul" du wordcloud
+    wc.generate(str(df[ df['titre'] == str(titre) ]['avis']))  # "Calcul" du wordcloud
+    fig = px.imshow(wc)
+
     # Obtenir un objet Image à partir de wc
     image = wc.to_image()
-
     # Enregistrer l'image en utilisant la méthode save de l'objet Image
     image.save(r'./data/word_cloud.png')
-    print('########################################################### image enregisterer')
+    print('########################################################### image enregistrer')
+
+    
+    return fig 
 
 if __name__ =='__main__' : 
-    word_cloud() 
+    word_cloud(titre) 
