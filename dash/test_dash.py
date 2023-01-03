@@ -54,7 +54,7 @@ app = dash.Dash()
 # Define the layout of the app
 app.layout = html.Div([
 
-    dcc.Dropdown(id = "select_titre", options = [{'label': title, 'value': title} for title in df['titre'].unique()], value='M3GAN'),
+    
 
     # Add a title
     html.H1('My Web App'),
@@ -63,7 +63,7 @@ app.layout = html.Div([
 
         
         #wordcloud
-          html.Img(src='word_cloud.png'),
+        html.Img(src=r"./data/word_cloud.png"),
         # Add the first graph (countplot)
         dcc.Graph(figure=fig1),
         # Add the second graph (pie chart)
