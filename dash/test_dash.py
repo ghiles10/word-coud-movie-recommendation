@@ -8,14 +8,12 @@ import matplotlib.pyplot as plt
 import recuperation_sql_to_pandas
 import word_cloud 
 import base64
-
-
 # read data
 df = recuperation_sql_to_pandas.sql_to_pandas()
 
 
 # fig1 
-fig1 = px.histogram(df, x="duree", title="duree")
+fig = px.histogram(df, x="duree", title="duree")
 
 # Convertir le graphique en code HTML png
 word_cloud.word_cloud()
@@ -23,9 +21,10 @@ word_cloud.word_cloud()
 import os
 # Vérifiez si le fichier "monfichier.txt" existe dans le répertoire courant
 if os.path.exists(r"./data/word_cloud.png"):
-    print("-----------------------------------------------------------------------------------")
+    print("----------------------------------------------------------------------------------->")
+    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
 else:
-    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    print("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
 
 image_filename = r"./data/word_cloud.png" # replace with your own image
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
@@ -62,7 +61,9 @@ app.layout = html.Div([
     # Add a div to hold the graphs
     html.Div([
 
-        dcc.Graph(id='my_bee_map', figure={}), 
+        
+        #wordcloud
+          html.Img(src='word_cloud.png'),
         # Add the first graph (countplot)
         dcc.Graph(figure=fig1),
         # Add the second graph (pie chart)
@@ -74,17 +75,8 @@ app.layout = html.Div([
     ]),
 ])
 
-# Connect the Plotly graphs with Dash Components
-@app.callback(
-    [Output(component_id='my_bee_map', component_property='figure')],
-    [Input(component_id='select_titre', component_property='value')]
-)
 
-def update_graph(option_slctd):
-    # Générez le nuage de mots en utilisant les données filtrées
-    fig = word_cloud.word_cloud(option_slctd)
-    return fig
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', debug = True)
+    app.run_server(host='0.0.0.0')

@@ -47,7 +47,7 @@ services:
     networks:
       - monreseau
     ports:
-      - "8235:8050"
+      - "8001:8050"
     links:
       - db
 
