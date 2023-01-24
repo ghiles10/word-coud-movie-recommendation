@@ -2,7 +2,6 @@ import film
 
 def extract_data() : 
     
-
     """permet de scrapper les données et écrire dans un fichier txt"""
     print('debut scrapping')
     raw_data = film.get_donnees_film()
