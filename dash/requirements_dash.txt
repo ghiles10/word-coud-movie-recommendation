@@ -1,0 +1,8 @@
+pandas
+sqlalchemy
+psycopg2
+dash
+plotly
+wordcloud
+nltk
+scikit-learn

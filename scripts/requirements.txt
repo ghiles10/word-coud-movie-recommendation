@@ -1,0 +1,7 @@
+beautifulsoup4==4.11.1
+requests==2.28.1
+pandas
+sqlalchemy
+pyspark==3.3.1
+findspark==2.0.1
+psycopg2

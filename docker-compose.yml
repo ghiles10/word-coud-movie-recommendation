@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: mydatabase
+    ports:
+      - 5432:5432
+    networks:
+      - monreseau
+    restart: always
+
+  admine:
+    image: adminer
+    restart: always
+    depends_on:
+      - python
+    ports:
+      - 8080:8080
+    networks:
+      - monreseau    
+    links:
+      - db
+
+  python:
+    build:
+      context: ./scripts
+      dockerfile: Dockerfile
+    networks:
+      - monreseau     
+    depends_on:
+      - db    
+    links:
+      - db
+    
+  dash:
+    build:
+      context: ./dash
+      dockerfile: Dockerfile
+    depends_on:
+      python:
+        condition: service_completed_successfully
+    networks:
+      - monreseau
+    ports:
+      - "8001:8050"
+    links:
+      - db
+
+
+networks:
+  monreseau:
+     name: monreseau
+
