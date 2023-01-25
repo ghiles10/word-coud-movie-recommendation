@@ -6,4 +6,3 @@ plotly
 wordcloud
 nltk
 scikit-learn
-seaborn

@@ -3,7 +3,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 import pandas as pd 
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt 
 import recuperation_sql_to_pandas
 import os
