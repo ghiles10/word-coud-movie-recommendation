@@ -4,6 +4,7 @@ from dash import html
 import plotly.express as px
 import pandas as pd
 import recuperation_sql_to_pandas
+import acp_k_means
 import word_cloud 
 import base64
 
@@ -12,12 +13,16 @@ df = recuperation_sql_to_pandas.sql_to_pandas()
 
 # Convertir le graphique en code HTML png
 word_cloud.word_cloud()
+acp_k_means.recommandation()
 
 # Import the data for the first graph
 fig1 = px.histogram(df, x="duree", title="Durée film")
 
 image_filename = r"./data/word_cloud.png" 
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+
+image_acp = r"./data/acp_k_means.png" 
+encoded_image_acp = base64.b64encode(open(image_acp, 'rb').read())
 
 # Import the data for the second graph
 df['date'] = pd.to_datetime(df['date'])
@@ -49,6 +54,7 @@ app.layout = html.Div([
             value=title_options[0]
         ),
         html.Img(id='img',src='data:image/png;base64,{}'.format(encoded_image.decode())),
+        html.Img(id='img_acp',src='data:image/png;base64,{}'.format(encoded_image_acp.decode())),
         dcc.Graph(figure=fig1),
         dcc.Graph(figure=fig2),
         dcc.Graph(figure=fig3)
@@ -58,12 +64,15 @@ app.layout = html.Div([
 #Create callback function
 @app.callback(Output('img', 'src'),
               [Input('title-dropdown', 'value')])
-              
 def update_image(title):
+
+    """ Update the image"""
+
     word_cloud.word_cloud(title)
     image_filename = r"./data/word_cloud.png"
     encoded_image = base64.b64encode(open(image_filename, 'rb').read())
     return 'data:image/png;base64,{}'.format(encoded_image.decode())
+
 
 # Run the app
 if __name__ == '__main__':

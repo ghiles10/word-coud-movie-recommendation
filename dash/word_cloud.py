@@ -5,7 +5,10 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords 
 import os
 
-def word_cloud(title = 'Babylon') : 
+def word_cloud(title = 'Babylon') :
+
+    """ fonction qui permet de créer un word cloud à partir des avis des films """
+
     # read data
     df = recuperation_sql_to_pandas.sql_to_pandas()
 

@@ -9,4 +9,4 @@ RUN apt-get -y install python3-pip
 
 RUN pip install -r requirements_dash.txt
 
-CMD ["python3", "./test_dash.py"]
+CMD ["python3", "./dash_word_cloud.py"]
