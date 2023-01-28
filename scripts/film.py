@@ -3,7 +3,7 @@ import requests
 import re
 
 
-def get_url_films(nb_page = 3) : 
+def get_url_films(nb_page = 2) : 
     """permet de récupérer les liens de chaque film de la page du site web inital"""
 
     # pour stocker les url des pages web des films 

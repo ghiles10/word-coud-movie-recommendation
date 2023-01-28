@@ -6,4 +6,6 @@ install:
 	pip install -r $(REQS)
 
 run: install
-	pyhton3 $(APP)
+	/home/codespace/.python/current/bin/python3 $(APP)
+
+all : install run
