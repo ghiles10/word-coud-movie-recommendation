@@ -1,6 +1,0 @@
-pandas
-dash
-plotly
-wordcloud
-nltk
-scikit-learn

@@ -17,7 +17,7 @@ def word_cloud(title = 'Babylon') :
     
     # ajout des mots vides
     mots_vides = ["film", "\n","plus","a","sans","dans","sans","cette",'cet', "jour","encore","fait","comme","un","très", "tous","tout","cest","si",
-    "cela", 'peut',  "être", "aussi", "mais","par","dont", "moi", "il", "toi", 'ils', "les"] 
+    "cela", 'peut',  "être", "aussi", "mais","par","dont", "moi", "il", "toi", 'ils', "les",'quoi', "ca"] 
     stop_words.update(mots_vides) 
 
     # Filter the dataframe by title
