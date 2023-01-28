@@ -1,16 +1,12 @@
 from pyspark.sql import functions as F
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
-from scripts.write_to_txt import extract_data
 import warnings
 warnings.filterwarnings("ignore")
 
 def preproces_for_machine_learning() : 
 
     """cette fonction permet de nettoyer les données afin de pouvoir faire des stats desc et des modeles ML"""
-
-    # extraction des données
-    extract_data()
 
     #spark session 
     spark_session = SparkSession.builder.appName('data_film').getOrCreate()

@@ -1,15 +1,24 @@
+import sys
+sys.path.append(r'.')
 import dash
 from dash import dcc, html , Output, Input
 from dash import html
 import plotly.express as px
 import pandas as pd
-import recuperation_sql_to_pandas
 import acp_k_means
 import word_cloud 
 import base64
+from scripts.write_to_txt import extract_data
+from scripts.preprocess_for_ML_pyspark import preproces_for_machine_learning
+
+# Extract data
+extract_data()
 
 # read data
-df = recuperation_sql_to_pandas.spark_to_pandas()
+df = preproces_for_machine_learning()
+
+# afin de pouvoir utiliser les fonctions de plotly
+df = df.toPandas()
 
 # Convertir le graphique en code HTML png
 word_cloud.word_cloud()
@@ -41,6 +50,7 @@ df_type = df.apply(nettoyage_type, axis = 1)
 fig3 = px.histogram(df_type, x="type", title="Type de film")
 
 # Initialize the app
+
 app = dash.Dash()
 
 title_options = list(df['titre'].unique())
