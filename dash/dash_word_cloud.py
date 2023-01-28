@@ -83,7 +83,6 @@ def update_image(title):
     encoded_image = base64.b64encode(open(image_filename, 'rb').read())
     return 'data:image/png;base64,{}'.format(encoded_image.decode())
 
-
 # Run the app
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0')

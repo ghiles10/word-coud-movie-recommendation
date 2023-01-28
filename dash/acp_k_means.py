@@ -1,9 +1,9 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
-import pandas as pd 
-import numpy as np
 import matplotlib.pyplot as plt 
+import pandas as pd
+import numpy as np
 from scripts.preprocess_for_ML_pyspark import preproces_for_machine_learning
 import os
 
@@ -59,7 +59,6 @@ def recommandation():
     # save image matplotlib 
     plt.savefig(r'./data/acp_k_means.png')
 
-
 if __name__ == '__main__' : 
-    recommandation() 
+    recommandation()
     
