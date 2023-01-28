@@ -1,21 +1,16 @@
-def sql_to_pandas():
-    import sqlalchemy
-    import pandas as pd
+from scripts import preprocess_for_ML_pyspark 
+import sys
+sys.path.append(r'.')
 
-    # Create a connection string
-    conn_string = "postgresql://docker:docker@db/mydatabase"
+def spark_to_pandas() : 
 
-    # Create the connection object
-    conn = sqlalchemy.create_engine(conn_string)
+    """ cette fonction permet de transformer les données spark en pandas afin de pouvoir faire des stats desc et des modeles ML"""
 
-    # Execute a SELECT statement to retrieve the data from the table
-    df = pd.read_sql_query("SELECT * FROM film", conn)
+    data = preprocess_for_ML_pyspark.preproces_for_machine_learning()
+    data_pandas = data.toPandas()
 
-    return df
-
-if __name__ =='__main__' : 
-    sql_to_pandas()
+    return data_pandas 
 
 
-
-
+if __name__ == '__main__' :
+    spark_to_pandas() 

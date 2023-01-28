@@ -12,7 +12,7 @@ def recommandation():
     """ this function is used to make a recommandation of film to the user """
 
     # read df 
-    df = recuperation_sql_to_pandas.sql_to_pandas()
+    df = recuperation_sql_to_pandas.spark_to_pandas()
     df1= df[['titre']]
     df['date'] = pd.to_datetime(df['date'])
     df['month'] = df['date'].dt.month

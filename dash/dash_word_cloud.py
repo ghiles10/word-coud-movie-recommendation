@@ -9,7 +9,7 @@ import word_cloud
 import base64
 
 # read data
-df = recuperation_sql_to_pandas.sql_to_pandas()
+df = recuperation_sql_to_pandas.spark_to_pandas()
 
 # Convertir le graphique en code HTML png
 word_cloud.word_cloud()

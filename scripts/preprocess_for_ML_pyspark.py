@@ -1,5 +1,4 @@
 from pyspark.sql import functions as F
-import re 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 import warnings
@@ -39,7 +38,7 @@ def preproces_for_machine_learning() :
     data = data.withColumn("date", F.regexp_replace('date','septembre', "09"))
 
     # changer le format des dates  
-    spark_session.conf.set("spark.sql.legacy.timeParserPolicy", "LEGACY") # car ne veut pas reconnaitre le format de base 
+    spark_session.conf.set("spark.sql.legacy.timeParserPolicy", "LEGACY") # car ne veut pas reconnaitre le format de base
     data = data.withColumn("date", F.to_date("date", "dd MM yyyy"))
 
     return data 

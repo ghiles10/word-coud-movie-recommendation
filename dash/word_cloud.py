@@ -10,7 +10,7 @@ def word_cloud(title = 'Babylon') :
     """ fonction qui permet de créer un word cloud à partir des avis des films """
 
     # read data
-    df = recuperation_sql_to_pandas.sql_to_pandas()
+    df = recuperation_sql_to_pandas.spark_to_pandas()
 
     # stop word 
     stop_words = set(stopwords.words('french'))
