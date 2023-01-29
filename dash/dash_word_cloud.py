@@ -46,19 +46,30 @@ app = dash.Dash()
 title_options = list(df['titre'].unique())
 
 app.layout = html.Div([
-    html.H1('My Web App'),
+    html.H1('RECOMMANDATION DE FILM'),
+    html.P("""Cette application permet de recommander des films en fonction de votre choix.
+    Une fois le film choisi, une nuage de mot apparaitra avec les mots les plus utilisés dans le synopsis du film.
+    Ensuite, une recommandation sera faite en fonction de la similarité des films.
+    Des statistiques sur l'ensemble de la base de données sont également disponibles."""),
+
     html.Div([
         dcc.Dropdown(
             id='title-dropdown',
             options=[{'label': title, 'value': title} for title in title_options],
             value=title_options[0]
         ),
-        html.Img(id='img',src='data:image/png;base64,{}'.format(encoded_image.decode())),
-        html.Img(id='img_acp',src='data:image/png;base64,{}'.format(encoded_image_acp.decode())),
+        html.Div([
+            html.Div(["Word Cloud"], style={'text-align': 'center', 'font-size': '100'}),
+            html.Img(id='img',src='data:image/png;base64,{}'.format(encoded_image.decode()))
+        ],style={'display': 'inline-block', 'width': '100%', 'text-align': 'center'}),
+        html.Div([
+            html.Div(["Recommendation : ACP + K-MEANS"], style={'text-align': 'center', 'font-size': '100'}),
+            html.Img(id='img_acp',src='data:image/png;base64,{}'.format(encoded_image_acp.decode()))
+        ],style={'display': 'inline-block', 'width': '100%', 'text-align': 'center'}),
         dcc.Graph(figure=fig1),
         dcc.Graph(figure=fig2),
         dcc.Graph(figure=fig3)
-    ])
+    ], style={'column-count': 2})
 ])
 
 #Create callback function
