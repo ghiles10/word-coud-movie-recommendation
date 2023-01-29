@@ -37,8 +37,10 @@ def word_cloud(title = 'Babylon') :
     if not os.path.exists("./data"):
         os.mkdir("./data") 
 
-    image.save(r'./data/word_cloud.png')
+    image.save(r'./data/word_cloud.png') 
+
+    return wc.words_ 
 
 if __name__ =='__main__' : 
-    word_cloud()
+    word_cloud() 
 

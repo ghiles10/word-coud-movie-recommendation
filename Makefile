@@ -8,6 +8,10 @@ install:
 run: install
 	/home/codespace/.python/current/bin/python3 $(APP)
 
+test : 
+	pip install pytest==7.0.1 
+	pytest -v
+
 delete :
 	rm -rf data 
 
