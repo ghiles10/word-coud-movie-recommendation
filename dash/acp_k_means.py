@@ -1,10 +1,10 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
-import pandas as pd 
-import numpy as np
 import matplotlib.pyplot as plt 
-import recuperation_sql_to_pandas
+import pandas as pd
+import numpy as np
+from scripts.preprocess_for_ML_pyspark import preproces_for_machine_learning
 import os
 
 def recommandation():
@@ -12,7 +12,7 @@ def recommandation():
     """ this function is used to make a recommandation of film to the user """
 
     # read df 
-    df = recuperation_sql_to_pandas.sql_to_pandas()
+    df = preproces_for_machine_learning().toPandas()
     df1= df[['titre']]
     df['date'] = pd.to_datetime(df['date'])
     df['month'] = df['date'].dt.month
@@ -59,7 +59,6 @@ def recommandation():
     # save image matplotlib 
     plt.savefig(r'./data/acp_k_means.png')
 
-
 if __name__ == '__main__' : 
-    recommandation() 
+    recommandation()
     
