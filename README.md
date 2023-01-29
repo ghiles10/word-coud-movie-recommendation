@@ -22,3 +22,4 @@ For this purpose, the data is processed using pandas and sklearn.
 ## Getting Started
 
 A Makefile has been created for ease of use in launching the application. To start the application, simply run the command ```make run```
+Run ```make delete``` to delete the data collected 
