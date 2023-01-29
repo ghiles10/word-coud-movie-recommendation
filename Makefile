@@ -6,7 +6,7 @@ install:
 	pip install -r $(REQS)
 
 run: install
-	/home/codespace/.python/current/bin/python3 $(APP)
+	python3 $(APP)
 
 test : 
 	pip install pytest==7.0.1 
