@@ -1,10 +1,9 @@
 from bs4 import BeautifulSoup
 import requests 
 import re
-# import pprint
 
 
-def get_url_films(nb_page = 2) : 
+def get_url_films(nb_page = 3) : 
     """permet de récupérer les liens de chaque film de la page du site web inital"""
 
     # pour stocker les url des pages web des films 
