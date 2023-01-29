@@ -1,15 +1,24 @@
+import sys
+sys.path.append(r'.')
 import dash
 from dash import dcc, html , Output, Input
 from dash import html
 import plotly.express as px
 import pandas as pd
-import recuperation_sql_to_pandas
 import acp_k_means
 import word_cloud 
 import base64
+from scripts.write_to_txt import extract_data
+from scripts.preprocess_for_ML_pyspark import preproces_for_machine_learning
+
+# Extract data
+extract_data()
 
 # read data
-df = recuperation_sql_to_pandas.sql_to_pandas()
+df = preproces_for_machine_learning()
+
+# afin de pouvoir utiliser les fonctions de plotly
+df = df.toPandas()
 
 # Convertir le graphique en code HTML png
 word_cloud.word_cloud()
@@ -41,25 +50,38 @@ df_type = df.apply(nettoyage_type, axis = 1)
 fig3 = px.histogram(df_type, x="type", title="Type de film")
 
 # Initialize the app
+
 app = dash.Dash()
 
 title_options = list(df['titre'].unique())
 
 app.layout = html.Div([
-    html.H1('My Web App'),
+    html.H1('RECOMMANDATION DE FILM'),
+    html.P("""Cette application permet de recommander des films en fonction de votre choix.
+    Une fois le film choisi, une nuage de mot apparaitra avec les mots les plus utilisés dans le synopsis du film.
+    Ensuite, une recommandation sera faite en fonction de la similarité des films.
+    Des statistiques sur l'ensemble de la base de données sont également disponibles."""),
+
     html.Div([
         dcc.Dropdown(
             id='title-dropdown',
             options=[{'label': title, 'value': title} for title in title_options],
             value=title_options[0]
         ),
-        html.Img(id='img',src='data:image/png;base64,{}'.format(encoded_image.decode())),
-        html.Img(id='img_acp',src='data:image/png;base64,{}'.format(encoded_image_acp.decode())),
+        html.Div([
+            html.Div(["Word Cloud"], style={'text-align': 'center', 'font-size': '100'}),
+            html.Img(id='img',src='data:image/png;base64,{}'.format(encoded_image.decode()))
+        ],style={'display': 'inline-block', 'width': '100%', 'text-align': 'center'}),
+        html.Div([
+            html.Div(["Recommendation : ACP + K-MEANS"], style={'text-align': 'center', 'font-size': '100'}),
+            html.Img(id='img_acp',src='data:image/png;base64,{}'.format(encoded_image_acp.decode()))
+        ],style={'display': 'inline-block', 'width': '100%', 'text-align': 'center'}),
         dcc.Graph(figure=fig1),
         dcc.Graph(figure=fig2),
         dcc.Graph(figure=fig3)
-    ])
+    ], style={'column-count': 2})
 ])
+
 
 #Create callback function
 @app.callback(Output('img', 'src'),
@@ -72,7 +94,6 @@ def update_image(title):
     image_filename = r"./data/word_cloud.png"
     encoded_image = base64.b64encode(open(image_filename, 'rb').read())
     return 'data:image/png;base64,{}'.format(encoded_image.decode())
-
 
 # Run the app
 if __name__ == '__main__':
