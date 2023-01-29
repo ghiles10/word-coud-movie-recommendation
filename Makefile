@@ -9,7 +9,7 @@ run: install
 	python3 $(APP)
 
 test : 
-	pip install pytest==7.0.1 
+	pip3 install pytest==7.0.1 
 	pytest -v
 
 delete :
