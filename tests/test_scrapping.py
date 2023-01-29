@@ -34,7 +34,7 @@ def test_preproces_for_machine_learning():
     # Vérifier que le résultat n'est pas vide
     assert result.count() > 0 
 
-def test_word_cloud_png() : 
+def test_word_cloud_png() :     
 
     """ Teste si le fichier word_cloud.png n'est pas vide"""
 
