@@ -25,9 +25,6 @@ def test_preproces_for_machine_learning():
 
     """Teste la fonction preproces_for_machine_learning"""
 
-    # Initialiser la session Spark
-    spark_session = SparkSession.builder.appName('data_film').getOrCreate()
-
     # Appeler la fonction
     result = preprocess_for_ML_pyspark.preproces_for_machine_learning()
 
