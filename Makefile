@@ -16,3 +16,6 @@ delete :
 	rm -rf data 
 
 all : install run 
+
+
+# okokoko
